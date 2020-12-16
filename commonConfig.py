@@ -1,5 +1,5 @@
 # common config
-
+__category__ = ['buildings', 'forest', 'glacier', 'mountain', 'sea', 'street']
 __batch_size__ = 32
 __img_height__ = 180
 __img_width__ = 180
