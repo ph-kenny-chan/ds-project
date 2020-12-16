@@ -1,3 +1,4 @@
+import ImageClassifierModel as model
 import loadImage as load
 import commonConfig as cmn
 import os
@@ -21,27 +22,47 @@ for images, labels in train_ds.take(20):
     ax.axis("on")
     plt.imshow(images[i].numpy().astype("uint8"))
 
-plt.suptitle('Categories of Images')
+plt.suptitle('Visualisation - Categories of Images')
 plt.tight_layout()
 plt.show()
 
-for image_batch, labels_batch in train_ds:
-  print(image_batch.shape)
-  print(labels_batch.shape)
+print('############################')
+print('########Build Model#########')
+print('############################')
+# Build Model
+model = model.ImageClassifierModel.build()
+model.summary()
+
+print('############################')
+print('########Train Model#########')
+print('############################')
+for train_img, train_lbl in train_ds:
+  print('Training Image shape:')
+  print(train_img.shape)
+  print('Training Label shape:')
+  print(train_lbl.shape)
   break
 
-# Data Visualisation - Use OS Method to read the path
+trained = model.fit(train_img,train_lbl,epochs=20,validation_split=0.30)
 
-# for idx, category in enumerate(cmn.__category__):
-#     path = os.path.join(cmn.__train_dir__, category)
-#     for img in os.listdir(path):
-#         img_array = cv2.imread(os.path.join(path, img))
-#         sub_plot = fig.add_subplot(3, 3, idx+1)
-#         sub_plot.set_title(category)
-#         plt.imshow(img_array)
-#         break
-#
-# plt.suptitle('Categories of Images')
-# plt.tight_layout()
-# plt.show()
+# Visualise Training Data
+plt.figure(figsize=(10,5))
+ax2 = plt.subplot(1,2,1)
+ax2.plot(trained.history['accuracy'])
+ax2.plot(trained.history['val_accuracy'])
+ax2.set_title('Model accuracy')
+ax2.set_ylabel('Accuracy')
+ax2.set_xlabel('Epoch')
+ax2.legend(['Train', 'Test'], loc='upper left')
 
+ax3 = plt.subplot(1,2,2)
+ax3.plot(trained.history['loss'])
+ax3.plot(trained.history['val_loss'])
+ax3.set_title('Model loss')
+ax3.set_ylabel('Loss')
+ax3.set_xlabel('Epoch')
+ax3.legend(['Train', 'Test'], loc='upper left')
+
+plt.suptitle('Visualisation - Accuracy and Loss of Training Data')
+plt.tight_layout()
+plt.show()
