@@ -33,15 +33,16 @@ test_labels = le.transform(test_labels)
 class TestModel(HyperModel):
 
     def build(self, hp):
-        model = keras.Sequential()
-        Conv2D(32, (3, 3), activation='relu', padding="same", input_shape=(cfg.__img_height__, cfg.__img_width__, 3)),
-        MaxPooling2D(pool_size=(2, 2), strides=(2, 2)),
-        Conv2D(32, (3, 3), activation='relu', padding="same"),
-        MaxPooling2D(pool_size=(2, 2), strides=(2, 2)),
-        Flatten(),
-        Dense(units=hp.Int('units', min_value=28, max_value=128, step=32), activation=tf.nn.relu),
-        Dense(6),
-        Activation("softmax")
+        model = keras.Sequential([
+            Conv2D(32, (3, 3), activation='relu', padding="same", input_shape=(cfg.__img_height__, cfg.__img_width__, 3)),
+            MaxPooling2D(pool_size=(2, 2), strides=(2, 2)),
+            Conv2D(32, (3, 3), activation='relu', padding="same"),
+            MaxPooling2D(pool_size=(2, 2), strides=(2, 2)),
+            Flatten(),
+            Dense(units=hp.Int('units', min_value=60, max_value=128, step=32), activation=tf.nn.relu),
+            Dense(6),
+            Activation("softmax")
+        ])
         model.compile(
             optimizer=keras.optimizers.Adam(
                 hp.Choice('learning_rate',
@@ -61,7 +62,7 @@ tuner = RandomSearch(
 
 tuner.search_space_summary()
 tuner.search(train_images, train_labels,
-             epochs=1,
+             epochs=20,
              validation_data=(test_images, test_labels))
 tuner.results_summary()
 models = tuner.get_best_models(num_models=2)
