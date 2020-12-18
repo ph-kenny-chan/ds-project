@@ -1,10 +1,11 @@
 import ImageClassifierModel as model
 import loadImage as load
-import commonConfig as cmn
+import config as cmn
 import os
 import random
 from matplotlib import pyplot as plt
 import tensorflow as tf
+from tensorflow import keras as keras
 import numpy as np
 import cv2
 
@@ -32,6 +33,7 @@ print('############################')
 # Build Model
 model = model.ImageClassifierModel.build()
 model.summary()
+model.compile(optimizer = 'adam', loss = 'sparse_categorical_crossentropy', metrics=['accuracy'])
 
 print('############################')
 print('########Train Model#########')
@@ -43,7 +45,7 @@ for train_img, train_lbl in train_ds:
   print(train_lbl.shape)
   break
 
-trained = model.fit(train_img,train_lbl,epochs=20,validation_split=0.30)
+trained = model.fit(train_img, train_lbl, epochs=20, validation_split=0.30)
 
 # Visualise Training Data
 plt.figure(figsize=(10,5))

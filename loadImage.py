@@ -1,5 +1,5 @@
 import tensorflow as tf
-import commonConfig as cmn
+import config as cmn
 
 
 def load_train_ds():
