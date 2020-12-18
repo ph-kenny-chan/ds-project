@@ -15,11 +15,13 @@ from sklearn.preprocessing import LabelBinarizer
 
 
 (train_images, train_labels), (test_images, test_labels) = load_data()
-
+print(train_images.shape)
+print(train_labels.shape)
+print(test_images.shape)
+print(test_labels.shape)
 # Scale the data
 train_images = train_images / 255.0
 test_images = test_images / 255.0
-
 
 class_names = cfg.__category__
 
@@ -37,7 +39,7 @@ class TestModel(HyperModel):
         Conv2D(32, (3, 3), activation='relu', padding="same"),
         MaxPooling2D(pool_size=(2, 2), strides=(2, 2)),
         Flatten(),
-        Dense(units=hp.Int('units', min_value=128, max_value=256, step=32), activation=tf.nn.relu),
+        Dense(units=hp.Int('units', min_value=28, max_value=128, step=32), activation=tf.nn.relu),
         Dense(6),
         Activation("softmax")
         model.compile(
